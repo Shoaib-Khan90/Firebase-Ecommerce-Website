@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUXE STORE — Premium Shopping</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-logo">LUXE</div>
+
+  <ul class="nav-center">
+    <li class="nav-link active" onclick="scrollTo(0,0)">Home</li>
+    <li class="nav-link" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Shop</li>
+    <li class="nav-link" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Services</li>
+    <li class="nav-link" onclick="document.getElementById('footer').scrollIntoView({behavior:'smooth'})">Contact</li>
+  </ul>
+
+  <div class="nav-right">
+    <div class="search-box">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" opacity="0.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" placeholder="Search products..." id="searchInput" oninput="filterProducts()">
+    </div>
+
+    <!-- Cart -->
+    <button class="btn-cart" onclick="toggleCart()">
+      🛒
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+
+    <!-- Auth - shown when logged out -->
+    <button class="btn-auth" id="loginBtn" onclick="openAuth('login')">Sign In</button>
+
+    <!-- User avatar - shown when logged in -->
+    <div class="user-wrap" id="userWrap" style="display:none">
+      <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()"></div>
+      <div class="user-dropdown" id="userDropdown">
+        <div class="drop-name" id="dropName"></div>
+        <div class="drop-item" onclick="showToast('📦 Orders feature coming soon!','info')">📦 My Orders</div>
+        <div class="drop-item" onclick="showToast('❤️ Wishlist feature coming soon!','info')">❤️ Wishlist</div>
+        <div class="drop-item" onclick="showToast('⚙️ Settings coming soon!','info')">⚙️ Settings</div>
+        <div class="drop-item danger" onclick="firebaseLogout(); toggleDropdown()">🚪 Sign Out</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ════════════════ HERO ════════════════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-lines"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span class="hero-dot"></span>
+      New Collection 2025
+    </div>
+    <h1>
+      Premium
+      <em>Shopping</em>
+      Experience
+    </h1>
+    <p>Discover curated products from the world's finest brands. Delivered to your doorstep with elegance and care.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Shop Now</button>
+      <button class="btn-ghost" onclick="openAuth('register')">Join Free</button>
+    </div>
+  </div>
+
+  <div class="hero-float">
+    <div class="float-card">
+      <div class="float-icon">📦</div>
+      <div class="float-title">500+</div>
+      <div class="float-sub">Products</div>
+    </div>
+    <div class="float-card">
+      <div class="float-icon">⭐</div>
+      <div class="float-title">4.9</div>
+      <div class="float-sub">Rating</div>
+    </div>
+    <div class="float-card">
+      <div class="float-icon">🚀</div>
+      <div class="float-title">24h</div>
+      <div class="float-sub">Delivery</div>
+    </div>
+    <div class="float-card">
+      <div class="float-icon">🔒</div>
+      <div class="float-title">100%</div>
+      <div class="float-sub">Secure</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ STATS ════════════════ -->
+<div class="stats-bar">
+  <div class="stat"><div class="stat-val">50K+</div><div class="stat-lbl">Happy Customers</div></div>
+  <div class="stat"><div class="stat-val">500+</div><div class="stat-lbl">Products</div></div>
+  <div class="stat"><div class="stat-val">98%</div><div class="stat-lbl">Satisfaction Rate</div></div>
+  <div class="stat"><div class="stat-val">24/7</div><div class="stat-lbl">Support</div></div>
+</div>
+
+<!-- ════════════════ PRODUCTS ════════════════ -->
+<section class="section" id="products">
+  <div class="sec-header">
+    <div>
+      <div class="sec-title">Our <span>Collection</span></div>
+      <div class="sec-sub">Handpicked products crafted for those who appreciate quality</div>
+    </div>
+    <div class="view-all-btn">View All</div>
+  </div>
+
+  <div class="filter-row" id="filterRow">
+    <button class="chip on" onclick="setFilter('All', this)">All</button>
+    <button class="chip" onclick="setFilter('Electronics', this)">Electronics</button>
+    <button class="chip" onclick="setFilter('Fashion', this)">Fashion</button>
+    <button class="chip" onclick="setFilter('Home', this)">Home & Living</button>
+    <button class="chip" onclick="setFilter('Beauty', this)">Beauty</button>
+    <button class="chip" onclick="setFilter('Sports', this)">Sports</button>
+  </div>
+
+  <div class="grid" id="productGrid"></div>
+</section>
+
+<!-- ════════════════ FEATURES ════════════════ -->
+<section class="section" id="features" style="background:var(--bg2); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+  <div class="sec-header">
+    <div>
+      <div class="sec-title">Why Choose <span>Luxe?</span></div>
+      <div class="sec-sub">We deliver more than just products — we deliver an experience</div>
+    </div>
+  </div>
+  <div class="features-grid">
+    <div class="feat-card"><div class="feat-icon">🚀</div><div class="feat-title">Fast Delivery</div><div class="feat-desc">Next-day delivery available on all orders above PKR 2,000</div></div>
+    <div class="feat-card"><div class="feat-icon">🔒</div><div class="feat-title">Secure Payments</div><div class="feat-desc">All transactions are encrypted and 100% secure</div></div>
+    <div class="feat-card"><div class="feat-icon">↩️</div><div class="feat-title">Easy Returns</div><div class="feat-desc">30-day hassle-free return policy, no questions asked</div></div>
+    <div class="feat-card"><div class="feat-icon">🎯</div><div class="feat-title">Best Prices</div><div class="feat-desc">We guarantee the lowest prices with premium quality</div></div>
+    <div class="feat-card"><div class="feat-icon">💬</div><div class="feat-title">24/7 Support</div><div class="feat-desc">Our team is always available to help you anytime</div></div>
+    <div class="feat-card"><div class="feat-icon">✅</div><div class="feat-title">100% Authentic</div><div class="feat-desc">Every product is verified and sourced from genuine brands</div></div>
+  </div>
+</section>
+
+<!-- ════════════════ FOOTER ════════════════ -->
+<footer class="footer" id="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <span class="nav-logo">LUXE</span>
+      <p>Premium shopping experience with curated products from the world's finest brands, delivered with elegance.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <ul>
+        <li><a>New Arrivals</a></li>
+        <li><a>Best Sellers</a></li>
+        <li><a>Sale Items</a></li>
+        <li><a>Gift Cards</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a>FAQs</a></li>
+        <li><a>Shipping Info</a></li>
+        <li><a>Returns</a></li>
+        <li><a>Track Order</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a>About Us</a></li>
+        <li><a>Careers</a></li>
+        <li><a>Privacy Policy</a></li>
+        <li><a>Terms</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 LUXE Store. All rights reserved.</span>
+    <span>Made with ❤️ in Pakistan</span>
+  </div>
+</footer>
+
+<!-- ════════════════ CART SIDEBAR ════════════════ -->
+<div class="overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-head">
+    <div class="cart-head-title">Your Cart 🛒</div>
+    <button class="btn-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <div class="cart-empty-msg" id="cartEmpty">
+      <div class="empty-icon">🛍️</div>
+      <p>Your cart is empty.<br>Start shopping!</p>
+    </div>
+  </div>
+  <div class="cart-foot" id="cartFoot" style="display:none">
+    <div class="cart-subtotal"><span>Subtotal</span><span id="cartSubtotal">PKR 0</span></div>
+    <div class="cart-subtotal"><span>Shipping</span><span style="color:var(--success)">FREE</span></div>
+    <div class="cart-total">
+      <span class="cart-total-lbl">Total</span>
+      <div><span class="cart-total-val" id="cartTotal">PKR 0</span></div>
+    </div>
+    <button class="btn-checkout" onclick="checkout()">Proceed to Checkout →</button>
+  </div>
+</div>
+
+<!-- ════════════════ AUTH MODAL ════════════════ -->
+<div class="modal-overlay" id="authModal">
+  <div class="auth-modal">
+    <button class="modal-close" onclick="closeAuthModal()">✕</button>
+    <div class="modal-top">
+      <div class="modal-logo">✦ LUXE</div>
+      <div class="modal-tabs">
+        <div class="modal-tab on" id="tabLogin" onclick="switchTab('login')">Sign In</div>
+        <div class="modal-tab" id="tabRegister" onclick="switchTab('register')">Register</div>
+      </div>
+    </div>
+    <div class="modal-body">
+
+      <div class="auth-error" id="authError"></div>
+
+      <!-- LOGIN FORM -->
+      <div id="loginForm">
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input class="form-input" type="email" id="loginEmail" placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input class="form-input" type="password" id="loginPass" placeholder="Enter password" onkeydown="if(event.key==='Enter')doLogin()">
+        </div>
+        <button class="btn-submit" id="loginSubmit" onclick="doLogin()">Sign In</button>
+        <div class="modal-divider"><div class="div-line"></div><div class="div-text">or</div><div class="div-line"></div></div>
+        <button class="btn-google" onclick="firebaseGoogleLogin()">
+          <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+          Continue with Google
+        </button>
+      </div>
+
+      <!-- REGISTER FORM -->
+      <div id="registerForm" style="display:none">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input class="form-input" type="text" id="regName" placeholder="Your name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input class="form-input" type="email" id="regEmail" placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input class="form-input" type="password" id="regPass" placeholder="Min 6 characters" onkeydown="if(event.key==='Enter')doRegister()">
+        </div>
+        <button class="btn-submit" id="regSubmit" onclick="doRegister()">Create Account</button>
+        <div class="modal-divider"><div class="div-line"></div><div class="div-text">or</div><div class="div-line"></div></div>
+        <button class="btn-google" onclick="firebaseGoogleLogin()">
+          <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+          Continue with Google
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="script.js" type="module"></script>
+</body>
+</html>
