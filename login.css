@@ -1,0 +1,119 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Georgia', serif;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to right, #000000, #1a1a1a);
+  position: relative;
+}
+
+/* Background */
+body::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: url("https://images.unsplash.com/photo-1528909514045-2fa4ac7a08ba") no-repeat center/cover;
+  opacity: 0.2;
+  z-index: -1;
+}
+
+/* MAIN CONTAINER (was login-box) */
+.auth-container {
+  width: 350px;
+  padding: 40px;
+  background: rgba(0,0,0,0.75);
+  border-radius: 15px;
+  border: 1px solid gold;
+  box-shadow: 0 0 20px rgba(255,215,0,0.3);
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+/* TITLE (was h2 inside login-box) */
+.auth-title {
+  color: gold;
+  margin-bottom: 25px;
+}
+
+/* FORM */
+.auth-form {
+  width: 100%;
+}
+
+/* INPUT GROUP (was input-box) */
+.input-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+/* LABEL */
+.input-label {
+  color: #d4af37;
+  font-size: 14px;
+}
+
+/* INPUT FIELD */
+.input-field {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid gold;
+  border-radius: 8px;
+  background: transparent;
+  color: white;
+  outline: none;
+}
+
+.input-field:focus {
+  border-color: #ffd700;
+  box-shadow: 0 0 8px gold;
+}
+
+/* BUTTON (was btn) */
+.btn-primary {
+  width: 100%;
+  padding: 10px;
+  background: gold;
+  color: black;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-primary:hover {
+  background: #ffd700;
+  box-shadow: 0 0 10px gold;
+}
+
+/* MESSAGE TEXT */
+.message {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+/* FOOTER */
+.auth-footer {
+  margin-top: 15px;
+  font-size: 14px;
+  color: gray;
+}
+
+/* LINK */
+.link {
+  color: gold;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
