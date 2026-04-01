@@ -1,6 +1,6 @@
 import {
   auth,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
 } from "./firebase.js";
 
 const form = document.getElementById("loginForm");

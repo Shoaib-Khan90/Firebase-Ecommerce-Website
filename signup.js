@@ -1,3 +1,37 @@
+import {
+  auth,
+  provider,
+  signInWithPopup
+} from "./firebase.js";
+
+const googleBtn = document.getElementById("googleBtn");
+const message = document.getElementById("messageText");
+
+googleBtn.addEventListener("click", () => {
+
+  signInWithPopup(auth, provider)
+    .then((result) => {
+
+      const user = result.user;
+
+      message.innerText = "Google Login Successful ✅";
+      message.style.color = "green";
+
+      console.log(user);
+
+      // redirect
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 1000);
+
+    })
+    .catch((error) => {
+      message.innerText = error.message;
+      message.style.color = "red";
+    });
+
+});
+
 const form = document.getElementById("signupForm");
 
 form.addEventListener("submit", function(e) {
