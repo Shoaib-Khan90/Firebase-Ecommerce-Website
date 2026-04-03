@@ -373,3 +373,11 @@ document.addEventListener("keydown", (e) => {
 //  INIT
 // ════════════════════════════════════════════════════════════
 renderProducts();
+
+
+const button1 = document.getElementById("btn")
+
+button1.addEventListener("click",function(){
+  alert("Your account was successfully logout")
+  window.location.href = "login.html"
+})
